@@ -1,6 +1,9 @@
 Docker Django
 =============
 
+## Autres sources
+https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
+
 ## tl;dr
 ```bash
 $ git clone git@github.com:erroneousboat/docker-django.git
