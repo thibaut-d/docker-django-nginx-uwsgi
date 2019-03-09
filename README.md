@@ -6,6 +6,7 @@ This an an adaptation from erroneousboat/docker-django for my projects. If you n
 ## Sources
 * https://github.com/erroneousboat/docker-django
 * https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
+* https://github.com/testdrivenio/django-on-docker
 
 ## tl;dr
 ```bash
