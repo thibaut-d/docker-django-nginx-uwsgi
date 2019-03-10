@@ -18,7 +18,7 @@ services:
       volumes:
         - postgres:/var/lib/postgresql/data/pgdata
       env_file:
-        - ./config/environment/development.env
+        - ./config/environment/secret.env
 
     webserver:
       image: nginx:1.15
@@ -33,18 +33,18 @@ services:
         - ./config/webserver/localhost.key:/etc/ssl/private/localhost.key
         - static-files:/srv/static-files
       env_file:
-        - ./config/environment/development.env
+        - ./config/environment/secret.env
       command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.tmpl > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
 
     webapp:
       build:
         context: webapp
       volumes:
-        - ./webapp/starter:/srv/starter
+        - ./webapp:/srv/myproject
         - static-files:/srv/static-files
       expose:
         - "8000"
       depends_on:
         - db
       env_file:
-        - ./config/environment/development.env
+        - ./config/environment/secret.env
