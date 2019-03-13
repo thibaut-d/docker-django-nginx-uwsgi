@@ -42,8 +42,11 @@ services:
       volumes:
         - ./webapp:/srv/myproject
         - static-files:/srv/static-files
+      expose:
+        - "3031"
       ports:
         - "8000:8000"
+        - "8001:8001"
       depends_on:
         - db
       env_file:

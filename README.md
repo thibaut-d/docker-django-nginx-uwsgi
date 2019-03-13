@@ -8,6 +8,11 @@ This an an adaptation from erroneousboat/docker-django for my projects. If you n
 * https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
 * https://github.com/testdrivenio/django-on-docker
 
+## Modifications from erroneousboat/docker-django (WIP)
+* Adapted for remote development
+* More flat structure with only one project in the webapp container
+* Minor updates on versions (2019/03)
+
 ## tl;dr
 ```bash
 $ git clone git@github.com:erroneousboat/docker-django.git
@@ -85,13 +90,11 @@ STATIC_ROOT = '/srv/static-files'
 ```
 
 ### Environment variables
-The file `config/environment/development.env` contains the environment
+The file `config/environment/sample.env` contains the environment
 variables needed in the containers. You can edit this as you see fit, and at
-the moment these are the defaults that this project uses. However when you
-intend to use this, keep in mind that you should keep this file out of version
-control as it can hold sensitive information regarding your project. The file
-itself will contain some commentary on how a variable will be used in the
-container.
+the moment these are the defaults that this project uses.
+It has to be renamed secret.env.
+Secret.env is in the .gitignore file of the project.
 
 ## Fire it up
 Start the container by issuing one of the following commands:
@@ -147,29 +150,44 @@ command.
 
 ```bash
 # Find container_name by using docker-compose ps
+$ sudo docker-compose ps
+
+# We will consider [container_name] = docker-django-nginx-uwsgi_webapp_1
+
+# Create an alias for shotening commands
+$ sudo alias  sudo docker exec -it docker-django-nginx-uwsgi_webapp_1 python3 /srv/myproject/manage.py = djman
+
+# Prefix for running manage.py commands 
+$ sudo docker exec -it docker-django-nginx-uwsgi_webapp_1 \
+    python3 /srv/myproject/manage.py
+
+# Run dev server for remote development on port 8001
+$ sudo docker exec -it docker-django-nginx-uwsgi_webapp_1 \
+    python3 /srv/myproject/manage.py runserver 0.0.0.0:8001
 
 # restart uwsgi in a running container.
-$ docker exec [container_name] touch /etc/uwsgi/reload-uwsgi.ini
+$ docker exec docker-django-nginx-uwsgi_webapp_1 \
+    touch /etc/uwsgi/reload-uwsgi.ini
 
 # create migration file for an app
-$ docker exec -it [container-name] \
-    python /srv/[project-name]/manage.py makemigrations scheduler
+$ docker exec -it docker-django-nginx-uwsgi_webapp_1 \
+    python /srv/myproject/manage.py makemigrations scheduler
 
 # migrate
-$ docker exec -it [container-name] \
-    python3 /srv/[project-name]/manage.py migrate
+$ docker exec -it docker-django-nginx-uwsgi_webapp_1 \
+    python3 /srv/myproject/manage.py migrate
 
 # get sql contents of a migration
-$ docker exec -it [container-name] \
-    python3 /srv/[project-name]/manage.py sqlmigrate [appname] 0001
+$ docker exec -it docker-django-nginx-uwsgi_webapp_1 \
+    python3 /srv/myproject/manage.py sqlmigrate [appname] 0001
 
 # get to interactive console
-$ docker exec -it [container-name] \
-    python3 /srv/[project-name]/manage.py shell
+$ docker exec -it docker-django-nginx-uwsgi_webapp_1 \
+    python3 /srv/myproject/manage.py shell
 
 # testing
-docker exec [container-name] \
-    python3 /srv/[project-name]/manage.py test
+docker exec docker-django-nginx-uwsgi_webapp_1 \
+    python3 /srv/myproject/manage.py test
 ```
 
 ## Troubleshooting

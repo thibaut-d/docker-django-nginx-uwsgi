@@ -30,7 +30,7 @@ if os.getenv('PRODUCTION','') == 'true' :
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS','')]
 
 
 # Application definition
