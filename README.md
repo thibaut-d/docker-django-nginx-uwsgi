@@ -10,43 +10,10 @@ This an an adaptation from erroneousboat/docker-django for my projects. If you n
 
 ## Modifications from erroneousboat/docker-django (WIP)
 * Adapted for remote development
-* More flat structure with only one project in the webapp container
+* More flat structure
+* Only one Django project in the webapp container
 * Minor updates on versions (2019/03)
 
-## tl;dr
-```bash
-$ git clone git@github.com:erroneousboat/docker-django.git
-$ docker-compose up
-```
-
-Now you can access the application at <https://localhost> and the admin site
-at <https://localhost/admin>.
-
-A project to get you started with Docker and Django. This is made to
-serve as an example for you to hack on, so I don't claim that this is the
-correct way to setup a system with Django and Docker. Thus, I advice to also
-look at other projects.
-
-Stack and version numbers used:
-
-| Name           | Version  |
-|----------------|----------|
-| Django         | 2.1.4    |
-| Nginx          | 1.15     |
-| Postgresql     | 11.1     |
-| uWSGI          | 2.0.17.1 |
-
-## Folder structure
-
-```
-$ tree -L 1 --dirsfirst
-.
-├── config              # files needed for configuration
-├── webapp              # actual webapp
-├── docker-compose.yml  # docker-compose setup with container orchestration instructions
-├── LICENSE             # license for this project
-└── README.md           # this file
-```
 
 ## Setting up
 
@@ -56,45 +23,13 @@ See installation instructions at: [docker documentation](https://docs.docker.com
 Install [docker compose](https://github.com/docker/compose), see installation
 instructions at [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
-### Django
-Create django project in the `webapp` folder or copy a project to the `webapp`
-folder or use the sample project enclosed in this project and go directly to
-the section 'Fire it up':
-
-```bash
-# Be sure you have Django installed on your system
-$ django-admin startproject <name_project>
-```
-
-Edit `config/environment/development.env` file and add the name of your
-project at `DJANGO_PROJECT_NAME` or just leave it as is to start the default
-application.
-
-
-Edit the `settings.py` file with the correct database credentials and static
-root:
-
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_NAME'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_HOST'),
-        'PORT': os.environ.get('POSTGRES_PORT'),
-    }
-}
-
-STATIC_ROOT = '/srv/static-files'
-```
 
 ### Environment variables
-The file `config/environment/sample.env` contains the environment
+The file `environment/.env.sample` contains the environment
 variables needed in the containers. You can edit this as you see fit, and at
 the moment these are the defaults that this project uses.
-It has to be renamed secret.env.
-Secret.env is in the .gitignore file of the project.
+It has to be renamed .env.
+.env is in the .gitignore file of the project.
 
 ## Fire it up
 Start the container by issuing one of the following commands:
