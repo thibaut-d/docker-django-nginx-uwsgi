@@ -12,11 +12,17 @@ volumes:
   postgres:
     driver: local
     
+networks:
+  backend:
+  frontend:
+    
 services:
     db:
       image: postgres:11
       volumes:
         - postgres:/var/lib/postgresql/data/pgdata
+      networks:
+        - backend
       env_file:
         - ./environment/.env
 
@@ -32,6 +38,8 @@ services:
         - ./webserver/localhost.crt:/etc/ssl/certs/localhost.crt
         - ./webserver/localhost.key:/etc/ssl/private/localhost.key
         - static-files:/srv/static-files
+      networks:
+        - frontend
       env_file:
         - ./environment/.env
       command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.tmpl > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
@@ -42,6 +50,9 @@ services:
       volumes:
         - ./webapp:/srv/myproject
         - static-files:/srv/static-files
+      networks:
+        - backend
+        - frontend
       expose:
         - "3031"
       ports:

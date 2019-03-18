@@ -55,3 +55,20 @@ fi
 #####
 echo "==> Starting uWSGI ..."
 /usr/local/bin/uwsgi --emperor /etc/uwsgi/django-uwsgi.ini
+
+
+#####
+# Launch Cron for Django backups
+#####
+
+# Grant execution rights
+chmod +x ./config/dj_backup_rotated.sh
+
+# Give execution rights on the cron job
+chmod 0644 /etc/cron.d/dj_backup.crontab
+
+# Create the log file to be able to run tail
+touch /var/log/cron.log
+
+# Run the command on container startup
+cron && tail -f /var/log/cron.log
