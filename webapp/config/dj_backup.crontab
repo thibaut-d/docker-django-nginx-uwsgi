@@ -1,2 +1,2 @@
-30 3 * * * root /srv/myproject/backups/dj_backup_rotated.sh
+30 3 * * * root /srv/myproject/config/dj_backup_rotated.sh
 # Replace myproject if needed. Don't remove the empty line at the end of this file. It is required to run the cron job.

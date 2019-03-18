@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Uncomment to enable debug mode
+#set -x
+#trap read debug
+
 # Modified from by https://wiki.postgresql.org/wiki/Automated_Backup_on_Linux
 
 echo "$(date): execute django backups" >> /var/log/cron.log 2>&1
@@ -20,15 +24,24 @@ while [ $# -gt 0 ]; do
                         ;;
         esac
 done
- 
+
+if [ -n $CONFIG_FILE_PATH ] ; then
+        echo "Got CONFIG_FILE_PATH from arguments : $CONFIG_FILE_PATH "
+else
+        echo "Could not get CONFIG_FILE_PATH from arguments. Trying from current script directory..."
+fi
+
 if [ -z $CONFIG_FILE_PATH ] ; then
         SCRIPTPATH=$(cd ${0%/*} && pwd -P)
+        echo "Trying to find config file in current directory: ${SCRIPTPATH}/dj_backup.config"
         CONFIG_FILE_PATH="${SCRIPTPATH}/dj_backup.config"
 fi
  
 if [ ! -r ${CONFIG_FILE_PATH} ] ; then
         echo "Could not load config file from ${CONFIG_FILE_PATH}" 1>&2
         exit 1
+else
+        echo "Config file sucessfully loaded"
 fi
  
 source "${CONFIG_FILE_PATH}"
@@ -37,7 +50,8 @@ source "${CONFIG_FILE_PATH}"
 ###########################
 #### START THE BACKUPS ####
 ###########################
- 
+echo "declaring function perform_backups()"
+
 function perform_backups()
 {
 	SUFFIX=$1
@@ -90,7 +104,12 @@ function perform_backups()
 	else
 		echo "None"
 	fi
- 
+  
+	echo -e "\nAll database backups complete!"
+}
+
+echo "Starting backups..."
+
 # MONTHLY BACKUPS
  
 DAY_OF_MONTH=`date +%d`
@@ -101,8 +120,10 @@ then
 	find $BACKUP_DIR -maxdepth 1 -name "*-monthly" -exec rm -rf '{}' ';'
  
 	perform_backups "-monthly"
- 
+  echo "Mounthly backups performed. Exiting..."
 	exit 0;
+else
+    echo "No mountly backup planned today"
 fi
  
 # WEEKLY BACKUPS
@@ -116,21 +137,28 @@ then
 	  find $BACKUP_DIR -maxdepth 1 -mtime +$EXPIRED_DAYS -name "*-weekly" -exec rm -rf '{}' ';'
  
 	  perform_backups "-weekly"
- 
+    echo "Weekly backups performed. Exiting..."
 	  exit 0;
 else
     echo "No weekly backup planned today"
 fi
  
 # DAILY BACKUPS
+
+echo "ENABLE_DAILY_BACKUPS is settled to $ENABLE_DAILY_BACKUPS "
+
 if [ $ENABLE_DAILY_BACKUPS = "yes" ];
 then 
     # Delete daily backups 7 days old or more
     find $BACKUP_DIR -maxdepth 1 -mtime +$DAYS_TO_KEEP -name "*-daily" -exec rm -rf '{}' ';'
     
     perform_backups "-daily"
-    
+    echo "Weekly backups performed. Exiting..."
     exit 0;
 else
     echo "Daily backups desactivated in config file. Set ENABLE_DAILY_BACKUPS=yes if needed;" 
 fi
+
+echo "End of file. Exiting..."
+
+# EOF
