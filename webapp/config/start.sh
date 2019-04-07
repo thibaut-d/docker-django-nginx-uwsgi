@@ -64,11 +64,18 @@ echo "==> Starting uWSGI ..."
 # Grant execution rights
 chmod +x ./config/dj_backup_rotated.sh
 
-# Give execution rights on the cron job
-chmod 0644 /etc/cron.d/dj_backup.crontab
+# Add the cron job
+(crontab -l ; echo "0 3 * * * root /srv/myproject/config/dj_backup_rotated.sh")| crontab -
+
+# Echo the crontab content 
+echo Checking crontab content...
+crontab -l
 
 # Create the log file to be able to run tail
 touch /var/log/cron.log
 
 # Run the command on container startup
 cron && tail -f /var/log/cron.log
+
+
+

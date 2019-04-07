@@ -11,6 +11,10 @@ volumes:
     driver: local
   postgres:
     driver: local
+  db-backups:
+    driver: local
+  webapp-backups:
+    driver: local
     
 networks:
   backend:
@@ -21,6 +25,8 @@ services:
       image: postgres:11
       volumes:
         - postgres:/var/lib/postgresql/data/pgdata
+        - db-backups:/srv/db-backups
+        - ./db:/srv/db
       networks:
         - backend
       env_file:
@@ -50,6 +56,7 @@ services:
       volumes:
         - ./webapp:/srv/myproject
         - static-files:/srv/static-files
+        - webapp-backups:/srv/webapp-backups
       networks:
         - backend
         - frontend

@@ -21,12 +21,5 @@ ADD ./config/database-check.py /srv/config/database-check.py
 RUN adduser --no-create-home --disabled-login --group --system django
 RUN chown -R django:django /srv/myproject
 
-# Install cron
-RUN apt-get update
-RUN apt-get install cron
-
-# Add crontab file in the cron directory
-ADD ./config/dj_backup.crontab /etc/cron.d/dj_backup.crontab
-
 # Execute start script
 CMD ["./start.sh"]
