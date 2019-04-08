@@ -33,8 +33,10 @@ else
     #
     # This will give some errors when there is no database to be flushed, but
     # you can ignore these messages.
-    echo "==> Django setup, executing: flush"
-    python3 /srv/${DJANGO_PROJECT_NAME}/manage.py flush --noinput
+    # echo "==> Django setup, executing: flush"
+    # python3 /srv/${DJANGO_PROJECT_NAME}/manage.py flush --noinput
+    ## Since our app structure will rely on db content, we don't want
+    ## to flush the db each time docker is started. Uncomment if needed.
 
     # Django: migrate
     #

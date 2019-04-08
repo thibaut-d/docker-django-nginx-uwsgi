@@ -1,14 +1,17 @@
 Docker Django
 =============
 
-This an an adaptation from erroneousboat/docker-django for my projects. If you need a work basis I would suggest to use erroneousboat's one instead since he is more likely to keep it up to date.
+This an an adaptation from erroneousboat/docker-django for my projects. Erroneousboat is more likely to keep it up to date than me. However feel free to take some inspiration if you need the additional features of this repository.
 
 ## Sources
 * https://github.com/erroneousboat/docker-django
 * https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
 * https://github.com/testdrivenio/django-on-docker
 
-## Modifications from erroneousboat/docker-django (WIP)
+## Modifications from erroneousboat/docker-django
+* Added rotated backup crons that save database exports in Docker volumes.
+* Backing up your docker volumes can then be done via a local Cron or https://github.com/blacklabelops/volumerize
+* Added media directory support
 * Adapted for remote development
 * More flat structure
 * Only one Django project in the webapp container

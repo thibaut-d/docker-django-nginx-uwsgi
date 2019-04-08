@@ -128,4 +128,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # MODIFIED !
-STATIC_ROOT = '/srv/static-files'
+STATIC_ROOT = '/srv/static-files/'
+
+# Media
+# MODIFIED !
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/srv/media-files/'

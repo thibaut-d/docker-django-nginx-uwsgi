@@ -9,6 +9,8 @@ version: "3"
 volumes:
   static-files:
     driver: local
+  media-files:
+    driver: local
   postgres:
     driver: local
   db-backups:
@@ -44,6 +46,7 @@ services:
         - ./webserver/localhost.crt:/etc/ssl/certs/localhost.crt
         - ./webserver/localhost.key:/etc/ssl/private/localhost.key
         - static-files:/srv/static-files
+        - media-files:/srv/media-files
       networks:
         - frontend
       env_file:
@@ -56,6 +59,7 @@ services:
       volumes:
         - ./webapp:/srv/myproject
         - static-files:/srv/static-files
+        - media-files:/srv/media-files
         - webapp-backups:/srv/webapp-backups
       networks:
         - backend
